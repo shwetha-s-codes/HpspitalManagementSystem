@@ -21,14 +21,14 @@ public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userID;
-    @Column(nullable = false)
-    private String password;
-    @Column(nullable = false)
-    private String firstName;
-    private String lastName;
 
     @Column(nullable = false,unique = true)
     private String emailID;
+
+    @Column(nullable = false)
+    private String password;
+
+
     //A user can have many roles and vice versa
     @ManyToMany(fetch = FetchType.EAGER)
     //Table containing the foreign keys of User & Roles makes sure that there is no redundant entries
@@ -39,6 +39,7 @@ public class Users {
 
     )
     private Set<Roles> roles=new HashSet<>();
+    
     private boolean isActive =true;
 
     @CreationTimestamp

@@ -1,8 +1,17 @@
 package com.Project.HospitalManagementSystem.Modules.Staff;
 
 import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
+import com.Project.HospitalManagementSystem.Modules.LookUpTables.Gender;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name="Staff")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Staff {
     @Id
     private  long staffId;
@@ -18,9 +27,9 @@ public class Staff {
     @Column(nullable = false)
     private  String lastName;
 
-    @OneToMany
+    @ManyToOne
     @JoinColumn(name="genderId")
-    private Byte genderId;
+    private Gender gender;
 
     @Column(nullable = false,unique = true)
     private  String phoneNumber;

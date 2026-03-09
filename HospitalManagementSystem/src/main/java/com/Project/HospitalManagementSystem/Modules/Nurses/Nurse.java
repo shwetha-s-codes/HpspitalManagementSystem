@@ -3,7 +3,15 @@ package com.Project.HospitalManagementSystem.Modules.Nurses;
 import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
 import com.Project.HospitalManagementSystem.Modules.LookUpTables.Gender;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Entity
+@Table(name="Nurses")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Nurse {
 
     @Id

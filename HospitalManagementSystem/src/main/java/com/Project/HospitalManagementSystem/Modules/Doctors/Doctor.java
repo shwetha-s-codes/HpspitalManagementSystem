@@ -1,11 +1,15 @@
 package com.Project.HospitalManagementSystem.Modules.Doctors;
 
 import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
+import com.Project.HospitalManagementSystem.Modules.Appointment.Appointment;
 import com.Project.HospitalManagementSystem.Modules.LookUpTables.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="Doctor")
@@ -37,8 +41,9 @@ public class Doctor {
     private Gender gender;
 
 
-    //Appointment ID
-
+    @OneToMany
+    @JoinColumn(name="appointmentId")
+    private List<Appointment> appointment=new ArrayList<>();
 
 
 
