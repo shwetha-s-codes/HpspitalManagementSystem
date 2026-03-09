@@ -1,4 +1,4 @@
-package com.Project.HospitalManagementSystem.UsersProfile.Users;
+package com.Project.HospitalManagementSystem.Modules.LookUpTables;
 
 import jakarta.persistence.*;
 
@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 @Table(name = "Roles")
 public class Roles {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long roleID;
+    private Byte roleID;
 
     @Column(nullable = false,unique = true)
     private String name;

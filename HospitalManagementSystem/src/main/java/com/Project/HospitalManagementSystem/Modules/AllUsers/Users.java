@@ -1,5 +1,6 @@
-package com.Project.HospitalManagementSystem.UsersProfile.Users;
+package com.Project.HospitalManagementSystem.Modules.AllUsers;
 
+import com.Project.HospitalManagementSystem.Modules.LookUpTables.Roles;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
