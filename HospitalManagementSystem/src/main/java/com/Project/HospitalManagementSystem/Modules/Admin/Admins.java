@@ -12,14 +12,15 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name="Users")
+@Table(name="Admins")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 
 public class Admins {
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userID;
+    private Long adminID;
 
     @Column(nullable = false,unique = true)
     private String emailID;
@@ -39,7 +40,9 @@ public class Admins {
     )
     private Set<Roles> roles=new HashSet<>();
 
-    private boolean isActive =true;
+
+    @Column(name="active" , nullable = false,columnDefinition = "TINYINT(1) DEFAULT 1")
+    private boolean active =true;
 
     @CreationTimestamp
 

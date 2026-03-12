@@ -23,7 +23,7 @@ public class Users {
     private Long userID;
 
     @Column(nullable = false,unique = true)
-    private String emailID;
+    private String emailId;
 
     @Column(nullable = false)
     private String password;
@@ -40,7 +40,7 @@ public class Users {
     )
     private Set<Roles> roles=new HashSet<>();
     
-    private boolean isActive =true;
+    private boolean active =true;
 
     @CreationTimestamp
 
