@@ -1,9 +1,6 @@
 package com.Project.HospitalManagementSystem.Modules.AllUsers;
 
 import com.Project.HospitalManagementSystem.Modules.DTO.LoginRequest;
-import com.Project.HospitalManagementSystem.Modules.DTO.LoginResponse;
-import com.Project.HospitalManagementSystem.Security.JwtUtil;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +12,10 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
-public class UsersLoginController {
+public class UsersController {
 
     @Autowired
-    private UsersLoginService usersLoginService;
+    private UsersService usersLoginService;
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){
