@@ -2,14 +2,14 @@ package com.Project.HospitalManagementSystem.Modules.Admin;
 
 import com.Project.HospitalManagementSystem.Modules.AllUsers.RolesRepo;
 import com.Project.HospitalManagementSystem.Modules.DTO.GenerateTokenRequest;
+import com.Project.HospitalManagementSystem.Modules.Exceptions.InvalidCredentialsException;
 import com.Project.HospitalManagementSystem.Modules.LookUpTables.Roles;
-import lombok.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.Optional;
 
 public class UserInvitationServiceImpl implements UserInvitation{
 
@@ -21,20 +21,26 @@ public class UserInvitationServiceImpl implements UserInvitation{
     @Autowired
     private RolesRepo rolesRepo;
 
+    @Autowired
     private InvitationToken invitationToken;
+    @Autowired
     private  Roles role;
 
     @Transactional
     public String  generateToken(GenerateTokenRequest request){
         String token=generateRandomToken();
-        Roles role=rolesRepo.findByname(request.getroleName());
+
+        Roles currentRole= (rolesRepo.findByname(request.getRoleName()).orElseThrow(() -> new InvalidCredentialsException("Role not found")));
+        Byte roleId=currentRole.getRoleID();
+
+
         invitationToken.setToken(token);
-        invitationToken.setRoleId(role.getRoleID());
+        invitationToken.setRoleId(roleId);
 
 
 
 
-        return "localhost://http/8080/auth/register";
+        return "localhost://http/8080/auth/register?token="+token+"&&roleId="+roleId;
 
     }
 
@@ -44,6 +50,6 @@ public class UserInvitationServiceImpl implements UserInvitation{
         random.nextBytes(bytes);
         return  Base64.getUrlEncoder().withoutPadding().encodeToString(bytes);
     }
-    }
+
 
 }

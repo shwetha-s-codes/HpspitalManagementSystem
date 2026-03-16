@@ -22,7 +22,7 @@ public class InvitationToken {
     private String token;
 
     @Column(nullable = false,unique=true)
-    private String roleId;
+    private Byte roleId;
 
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="adminId",nullable = false)
@@ -32,11 +32,9 @@ public class InvitationToken {
    private LocalDateTime createdAt=LocalDateTime.now();
 
    @Column(nullable = false)
-    private LocalDateTime expiresAt;
+    private LocalDateTime expiresAt=LocalDateTime.now().plusHours(24);
 
-   @Enumerated(EnumType.STRING)
-   @Column(nullable = false)
-    private TokenStatus status=TokenStatus.ACTIVE;
+
 }
 
 
