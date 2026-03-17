@@ -21,7 +21,8 @@ public class Appointment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long appointmentId;
+    @Column(columnDefinition = "VARCHAR(36)")
+    private String appointmentId;
 
     @ManyToOne
     @JoinColumn(name ="doctorId",nullable = false)

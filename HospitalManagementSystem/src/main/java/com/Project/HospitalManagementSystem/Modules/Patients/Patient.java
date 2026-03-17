@@ -18,7 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Patient {
     @Id
-    private  long patientId;
+    @Column(columnDefinition ="VARCHAR(36)")
+    private  String patientId;
 
     @OneToOne
     @MapsId //Used to access primary key from Parent table Users

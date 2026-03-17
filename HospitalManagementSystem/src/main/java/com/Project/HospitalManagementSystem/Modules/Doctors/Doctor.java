@@ -18,7 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Doctor {
     @Id
-    private  long doctorId;
+    @Column(columnDefinition = "VARCHAR(36)")
+    private  String doctorId;
     @OneToOne
     @MapsId
     @JoinColumn(name="userId")

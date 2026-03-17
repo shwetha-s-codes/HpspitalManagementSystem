@@ -15,7 +15,8 @@ import lombok.NoArgsConstructor;
 public class Nurse {
 
     @Id
-    private  long nurseId;
+    @Column(columnDefinition ="VARCHAR(36)")
+    private  String  nurseId;
 
     @OneToOne
     @MapsId //Used to access primary key from Parent table Users

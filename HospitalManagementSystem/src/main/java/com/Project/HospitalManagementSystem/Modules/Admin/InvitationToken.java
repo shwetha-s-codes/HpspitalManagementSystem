@@ -34,7 +34,9 @@ public class InvitationToken {
    @Column(nullable = false)
     private LocalDateTime expiresAt=LocalDateTime.now().plusHours(24);
 
-
+   @Enumerated(EnumType.STRING)
+   @Column(nullable = false)
+    private TokenStatus status=TokenStatus.ACTIVE;
 }
 
 

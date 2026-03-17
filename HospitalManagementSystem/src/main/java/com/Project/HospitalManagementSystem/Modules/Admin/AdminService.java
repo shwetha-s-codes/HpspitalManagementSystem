@@ -1,9 +1,8 @@
 package com.Project.HospitalManagementSystem.Modules.Admin;
 
-import com.Project.HospitalManagementSystem.Modules.DTO.LoginRequest;
+import com.Project.HospitalManagementSystem.Modules.DTO.GenerateTokenRequest;
 
-public class AdminService {
+public interface AdminService {
 
-
-
+    public String tokenGeneration(GenerateTokenRequest request);
 }

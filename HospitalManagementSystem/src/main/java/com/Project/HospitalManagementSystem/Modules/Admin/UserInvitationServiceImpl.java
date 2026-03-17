@@ -5,12 +5,14 @@ import com.Project.HospitalManagementSystem.Modules.DTO.GenerateTokenRequest;
 import com.Project.HospitalManagementSystem.Modules.Exceptions.InvalidCredentialsException;
 import com.Project.HospitalManagementSystem.Modules.LookUpTables.Roles;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.Optional;
 
+@Service
 public class UserInvitationServiceImpl implements UserInvitation{
 
     @Autowired
@@ -22,8 +24,12 @@ public class UserInvitationServiceImpl implements UserInvitation{
     private RolesRepo rolesRepo;
 
     @Autowired
+    private AdminRepo adminRepo;
+
+
     private InvitationToken invitationToken;
-    @Autowired
+
+
     private  Roles role;
 
     @Transactional
@@ -33,9 +39,13 @@ public class UserInvitationServiceImpl implements UserInvitation{
         Roles currentRole= (rolesRepo.findByname(request.getRoleName()).orElseThrow(() -> new InvalidCredentialsException("Role not found")));
         Byte roleId=currentRole.getRoleID();
 
+        Admins adminId= adminRepo.getReferenceById(request.getAdminId());
 
-        invitationToken.setToken(token);
-        invitationToken.setRoleId(roleId);
+        InvitationToken newtoken=new InvitationToken();
+        newtoken.setToken(token);
+        newtoken.setRoleId(roleId);
+        newtoken.setAdminId(adminId);
+        invitationTokenRepo.save(newtoken);
 
 
 

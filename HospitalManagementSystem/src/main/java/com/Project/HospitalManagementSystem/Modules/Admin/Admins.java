@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name="Admins")
@@ -19,8 +20,16 @@ import java.util.Set;
 
 public class Admins {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long adminID;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(columnDefinition ="VARCHAR(36)")
+    private String adminID;
+
+    @Column(nullable = false)
+    private  String firstName;
+
+    @Column(nullable = false)
+    private  String lastName;
+
 
     @Column(nullable = false,unique = true)
     private String emailID;
