@@ -1,6 +1,7 @@
 package com.Project.HospitalManagementSystem.Security;
 
 import com.Project.HospitalManagementSystem.Security.JwtAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.*;
@@ -14,19 +15,25 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter();
     }
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    @Autowired
+        private JwtAuthenticationEntryPoint authenticationEntryPoint; // ← inject it
 
-        http
-                .csrf(csrf->csrf.disable())
-                .authorizeHttpRequests(auth->auth
-                        .requestMatchers("/api/auth/**","/api/doctor/register").permitAll()
-                        .anyRequest().authenticated()
-                );
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+            http
+                    .csrf(csrf -> csrf.disable())
+                    .exceptionHandling(ex -> ex
+                            .authenticationEntryPoint(authenticationEntryPoint) // ← add this
+                    )
+                    .authorizeHttpRequests(auth -> auth
+                            .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
+                            .requestMatchers("/api/auth/admin/**").hasRole("ADMIN")
+                            .anyRequest().authenticated()
+                    );
 
-        http.addFilterBefore(jwtAuthenticationFilter(),
-                UsernamePasswordAuthenticationFilter.class);
+            http.addFilterBefore(jwtAuthenticationFilter(),
+                    UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
+            return http.build();
+        }
     }
-}

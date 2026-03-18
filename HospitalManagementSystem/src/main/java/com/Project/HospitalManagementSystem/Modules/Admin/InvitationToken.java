@@ -21,7 +21,7 @@ public class InvitationToken {
     @Column(nullable = false,unique=true)
     private String token;
 
-    @Column(nullable = false,unique=true)
+    @Column(nullable = false)
     private Byte roleId;
 
     @ManyToOne(fetch=FetchType.LAZY)

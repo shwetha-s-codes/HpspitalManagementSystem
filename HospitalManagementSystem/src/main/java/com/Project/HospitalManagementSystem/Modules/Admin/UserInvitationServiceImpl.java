@@ -27,10 +27,7 @@ public class UserInvitationServiceImpl implements UserInvitation{
     private AdminRepo adminRepo;
 
 
-    private InvitationToken invitationToken;
 
-
-    private  Roles role;
 
     @Transactional
     public String  generateToken(GenerateTokenRequest request){
@@ -50,7 +47,7 @@ public class UserInvitationServiceImpl implements UserInvitation{
 
 
 
-        return "localhost://http/8080/auth/register?token="+token+"&&roleId="+roleId;
+        return "http://localhost:8080/api/auth/registe?token="+token+"&&roleId="+roleId;
 
     }
 

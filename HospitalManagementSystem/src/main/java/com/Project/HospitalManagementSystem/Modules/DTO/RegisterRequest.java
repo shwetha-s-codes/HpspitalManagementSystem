@@ -14,6 +14,9 @@ import org.aspectj.bridge.IMessage;
 @NoArgsConstructor
 public class RegisterRequest {
 
+    private String token;
+    private Byte roleId;
+
     @NotBlank(message="Email is required")
     @Email(message="Invalid email format")
     private String emailId;
