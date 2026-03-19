@@ -18,5 +18,9 @@ public class AdminController {
     public String tokenGeneration(@Valid @RequestBody GenerateTokenRequest request){
         return adminService.tokenGeneration(request);
     }
+    @DeleteMapping("/delete/{email}")
+    public String deleteUser(@PathVariable String email) {
+        return adminService.deleteUser(email);
+    }
 
 }

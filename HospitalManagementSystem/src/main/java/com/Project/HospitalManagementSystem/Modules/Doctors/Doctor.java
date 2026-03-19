@@ -42,9 +42,7 @@ public class Doctor {
     private Gender gender;
 
 
-    @OneToMany
-    @JoinColumn(name="appointmentId")
-    private List<Appointment> appointment=new ArrayList<>();
+
 
 
 

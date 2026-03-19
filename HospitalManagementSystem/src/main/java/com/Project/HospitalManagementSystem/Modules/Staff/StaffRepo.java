@@ -1,12 +1,12 @@
-package com.Project.HospitalManagementSystem.Modules.Doctors;
+package com.Project.HospitalManagementSystem.Modules.Staff;
 
 import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface DoctorRepo extends JpaRepository<Doctor,String> {
+public interface StaffRepo extends JpaRepository<Staff,String> {
     boolean existsByUser(Users user);
 
-    Optional<Doctor> findByUser(Users user);
+    Optional<Staff> findByUser(Users user);
 }

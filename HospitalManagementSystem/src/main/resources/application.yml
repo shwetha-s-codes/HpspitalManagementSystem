@@ -9,9 +9,9 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
 
 
-  security:
+security:
     jwt:
       secret: ${JWT_SECRET:verysecretkeyverysecretkeyverysecretkey}

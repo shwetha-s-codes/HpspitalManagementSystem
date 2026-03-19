@@ -47,7 +47,7 @@ public class UserInvitationServiceImpl implements UserInvitation{
 
 
 
-        return "http://localhost:8080/api/auth/registe?token="+token+"&&roleId="+roleId;
+        return "http://localhost:8080/api/auth/register?token="+token+"&&roleId="+roleId;
 
     }
 

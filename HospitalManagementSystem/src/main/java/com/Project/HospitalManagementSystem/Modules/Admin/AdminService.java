@@ -5,4 +5,6 @@ import com.Project.HospitalManagementSystem.Modules.DTO.GenerateTokenRequest;
 public interface AdminService {
 
     public String tokenGeneration(GenerateTokenRequest request);
+
+    String deleteUser(String email);
 }
