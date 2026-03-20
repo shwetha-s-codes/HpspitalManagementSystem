@@ -135,7 +135,7 @@ public class ProfileServiceImpl implements ProfileService{
             return "Staff profile created successfully";
         }
 
-        // ─── UPDATE ──────────────────────────────────────────────
+
 
         @Transactional
         public String updateDoctorProfile(String email, DoctorProfileRequest request) {
@@ -217,7 +217,7 @@ public class ProfileServiceImpl implements ProfileService{
             return "Staff profile updated successfully";
         }
 
-        // ─── HELPERS ─────────────────────────────────────────────
+
 
         private Users getUser(String email) {
             return userRepo.findByemailId(email)

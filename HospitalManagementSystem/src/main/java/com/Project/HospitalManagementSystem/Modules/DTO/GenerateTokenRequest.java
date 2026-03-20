@@ -2,6 +2,7 @@ package com.Project.HospitalManagementSystem.Modules.DTO;
 
 import com.Project.HospitalManagementSystem.Modules.Admin.Admins;
 import com.Project.HospitalManagementSystem.Modules.Admin.InvitationToken;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,11 +16,13 @@ import java.util.UUID;
 @AllArgsConstructor
 public class GenerateTokenRequest {
 
-    @NotBlank(message = "please provide admin ID")
-    private String adminId;
+    @NotBlank(message = "please provide the recipient mail")
+    @Email
+    private String email;
 
     @NotBlank(message="Please provide the role to which yoo need the token for")
     private  String roleName;
+
 
 
 }

@@ -26,28 +26,28 @@ public class UserInvitationServiceImpl implements UserInvitation{
     @Autowired
     private AdminRepo adminRepo;
 
+    @Autowired
+    private EmailService emailService;
 
 
 
     @Transactional
-    public String  generateToken(GenerateTokenRequest request){
+    public void  generateToken(GenerateTokenRequest request,String adminId){
         String token=generateRandomToken();
 
         Roles currentRole= (rolesRepo.findByname(request.getRoleName()).orElseThrow(() -> new InvalidCredentialsException("Role not found")));
         Byte roleId=currentRole.getRoleID();
-
-        Admins adminId= adminRepo.getReferenceById(request.getAdminId());
-
         InvitationToken newtoken=new InvitationToken();
         newtoken.setToken(token);
         newtoken.setRoleId(roleId);
-        newtoken.setAdminId(adminId);
+        newtoken.setAdminId(adminRepo.getReferenceById(adminId));
         invitationTokenRepo.save(newtoken);
 
+        emailService.sendEmail(roleId,token, request.getEmail());
 
 
 
-        return "http://localhost:8080/api/auth/register?token="+token+"&&roleId="+roleId;
+
 
     }
 

@@ -3,9 +3,14 @@ package com.Project.HospitalManagementSystem.Modules.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
 public interface AdminRepo extends  JpaRepository<Admins, String> {
 
+
+
+
+    Optional<Admins> findByemailID(String adminmail);
 }

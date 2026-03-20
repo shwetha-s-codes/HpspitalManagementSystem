@@ -41,13 +41,21 @@ public class AdminServiceImpl implements AdminService{
     @Autowired
     private AppointmentRepo appointmentRepo;
 
-    public String tokenGeneration(GenerateTokenRequest request){
+    public void tokenGeneration(GenerateTokenRequest request, String adminmail){
 
-        if(!adminRepo.existsById(request.getAdminId())){
-            throw new InvalidCredentialsException("Invalid Admin Id");
+        System.out.print(adminmail);
 
+        Admins admins=adminRepo.findByemailID(adminmail).orElseThrow(()-> new InvalidCredentialsException("This is not a admin mail you can't access this resource"));
+        System.out.println(admins);
+        if(admins==null)
+        {
+            throw new InvalidCredentialsException("Admin Database not loaded");
         }
-        return userInvitation.generateToken(request);
+        System.out.println("Hello");
+        System.out.println(admins.getAdminId());
+        System.out.println("Hello");
+
+        userInvitation.generateToken(request,admins.getAdminId());
     }
 
     @Transactional

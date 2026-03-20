@@ -21,8 +21,8 @@ import java.util.UUID;
 public class Admins {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(columnDefinition ="VARCHAR(36)")
-    private String adminID;
+    @Column(name ="adminid" ,columnDefinition ="VARCHAR(36)")
+    private String adminId;
 
     @Column(nullable = false)
     private  String firstName;
