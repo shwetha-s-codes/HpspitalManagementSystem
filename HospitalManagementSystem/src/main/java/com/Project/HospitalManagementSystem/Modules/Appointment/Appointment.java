@@ -14,7 +14,7 @@ import java.time.LocalTime;
 
 @Entity
 @Data
-@Table(name="Appointments")
+@Table(name="Appointments",uniqueConstraints = @UniqueConstraint(columnNames = {"doctorId","appointmentDate","startTime"}))
 @AllArgsConstructor
 @NoArgsConstructor
 public class Appointment {
@@ -36,10 +36,18 @@ public class Appointment {
     private LocalDate appointmentdate;
 
     @Column(nullable = false)
-    private LocalTime appointmenttime;
+    private LocalTime startTime;
+
+    @Column(nullable=false)
+    private LocalTime endTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AppointmentStatus status=AppointmentStatus.OPEN;
 
     @CreationTimestamp
-    private LocalDateTime appointmentcreationtimestamp;
+    @Column(nullable = false,updatable = false)
+    private LocalDateTime appointmentcreationtimestamp=LocalDateTime.now();
 
 
 }

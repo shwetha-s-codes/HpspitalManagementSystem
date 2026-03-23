@@ -14,7 +14,7 @@ public class EmailServiceImpl implements EmailService{
 
 
     public void sendEmail(Byte roleId,String token,String email){
-        String registrationLink="http://localhost:8080/register?token="+token+"roleId="+roleId;
+        String registrationLink="http://localhost:8080/api/auth/register?token="+token+"roleId="+roleId;
         SimpleMailMessage message=new SimpleMailMessage();
         message.setFrom("shwethalearns247@gmail.com");
         message.setTo(email);
