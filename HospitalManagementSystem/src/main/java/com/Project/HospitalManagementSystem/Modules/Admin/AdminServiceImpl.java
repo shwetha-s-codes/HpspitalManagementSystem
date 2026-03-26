@@ -51,9 +51,9 @@ public class AdminServiceImpl implements AdminService{
         {
             throw new InvalidCredentialsException("Admin Database not loaded");
         }
-        System.out.println("Hello");
+
         System.out.println(admins.getAdminId());
-        System.out.println("Hello");
+
 
         userInvitation.generateToken(request,admins.getAdminId());
     }

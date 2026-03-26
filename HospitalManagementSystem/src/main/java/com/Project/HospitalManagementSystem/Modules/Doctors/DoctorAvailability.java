@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
-@Table(name="DoctorAvailability",uniqueConstraints =@UniqueConstraint(columnNames = {"doctorId","day"}))
+@Entity
+
+@Table(name="DoctorAvailability",uniqueConstraints =@UniqueConstraint(columnNames = {"doctorId","day","startTime","endTime"}))
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

@@ -21,4 +21,13 @@ public class GlobalExceptionHandler {
                         "error", ex.getMessage()
                 ));
     }
+    @ExceptionHandler(ShiftOverLapException.class)
+    public ResponseEntity<?> handleInvalidCredentials(ShiftOverLapException ex){
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of(
+                        "error", ex.getMessage()
+                ));
+    }
 }

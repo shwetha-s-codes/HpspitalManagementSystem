@@ -42,6 +42,8 @@ public class UsersServiceImpl implements UsersService{
         Users newUser=new Users();
         String emailId = request.getEmailId().toLowerCase().trim();
         InvitationToken invitationToken;
+        System.out.println(token);
+        System.out.println(roleId);
         if(token!=null && roleId!=null){
             invitationToken= (invitationTokenRepo.findBytoken(token).orElseThrow(() -> new InvalidCredentialsException("Please use Correct token")));
 
@@ -91,6 +93,7 @@ public class UsersServiceImpl implements UsersService{
     }
 
 
+    @Transactional
     public  String LoginUser(LoginRequest request){
 
         String emailId=request.getEmailId().toLowerCase().trim();
@@ -111,11 +114,11 @@ public class UsersServiceImpl implements UsersService{
                 .findFirst()
                 .orElseThrow(() -> new InvalidCredentialsException("No role assigned"));
 
-        String roleId = String.valueOf(role.getRoleID());
+        Byte roleId = role.getRoleID();
         String roleName = role.getName(); // e.g. "ADMIN", "DOCTOR"
 
 // Now generate token with roleId
-        return jwtUtil.generateToken(user.getEmailId(), roleId, roleName);
+        return jwtUtil.generateToken(user.getEmailId(), roleId, roleName,user.getUserID());
 
 
 

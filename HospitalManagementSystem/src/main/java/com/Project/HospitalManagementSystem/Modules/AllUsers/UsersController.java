@@ -25,6 +25,8 @@ public class UsersController {
                                                 @RequestParam(required = false) Byte roleId)
     {
 
+        System.out.println(roleId);
+        System.out.println(token);
         String message= usersService.registerUser(request,token,roleId);
         return ResponseEntity.status(HttpStatus.CREATED).body(message);
 

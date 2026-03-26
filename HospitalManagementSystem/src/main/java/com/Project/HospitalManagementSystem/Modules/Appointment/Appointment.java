@@ -14,7 +14,7 @@ import java.time.LocalTime;
 
 @Entity
 @Data
-@Table(name="Appointments",uniqueConstraints = @UniqueConstraint(columnNames = {"doctorId","appointmentDate","startTime"}))
+@Table(name="Appointments",uniqueConstraints = @UniqueConstraint(columnNames = {"doctorId","appointmentdate","startTime"}))
 @AllArgsConstructor
 @NoArgsConstructor
 public class Appointment {
