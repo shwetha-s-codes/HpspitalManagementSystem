@@ -7,9 +7,7 @@ import com.Project.HospitalManagementSystem.Modules.DTO.LoginRequest;
 import com.Project.HospitalManagementSystem.Modules.DTO.RegisterRequest;
 import com.Project.HospitalManagementSystem.Modules.Exceptions.InvalidCredentialsException;
 import com.Project.HospitalManagementSystem.Modules.LookUpTables.Roles;
-import com.Project.HospitalManagementSystem.Security.JwtUtil;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.transaction.Status;
+import com.Project.HospitalManagementSystem.Security.JwtService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +26,7 @@ public class UsersServiceImpl implements UsersService{
     private PasswordEncoder passwordEncoder;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtService jwtService;
 
     @Autowired
     InvitationTokenRepo invitationTokenRepo;
@@ -118,7 +116,7 @@ public class UsersServiceImpl implements UsersService{
         String roleName = role.getName(); // e.g. "ADMIN", "DOCTOR"
 
 // Now generate token with roleId
-        return jwtUtil.generateToken(user.getEmailId(), roleId, roleName,user.getUserID());
+        return jwtService.generateToken(user.getUserID());
 
 
 

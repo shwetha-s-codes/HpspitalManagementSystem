@@ -22,3 +22,4 @@ spring:
 security:
     jwt:
       secret: ${JWT_SECRET:verysecretkeyverysecretkeyverysecretkey}
+      expiration: ${JWT_EXPIRY:900000}

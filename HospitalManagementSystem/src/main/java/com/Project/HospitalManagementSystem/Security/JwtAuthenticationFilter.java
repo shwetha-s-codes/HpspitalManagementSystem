@@ -18,7 +18,7 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtService jwtService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -32,12 +32,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             String token = header.substring(7);
 
-            if(jwtUtil.validateToken(token)){
+            if(jwtService.validateToken(token)){
 
-                String email = jwtUtil.extractEmail(token);
-                String roleName = jwtUtil.extractRoleName(token);
-                Byte roleId= jwtUtil.extractRoleId(token);
-                String userId= jwtUtil.extractUserId(token);
+                String email = jwtService.extractEmail(token);
+                String roleName = jwtService.extractRoleName(token);
+                Byte roleId= jwtService.extractRoleId(token);
+                String userId= jwtService.extractUserId(token);
 
                 List<GrantedAuthority> authorities = List.of(
                         new SimpleGrantedAuthority("ROLE_" + roleName)

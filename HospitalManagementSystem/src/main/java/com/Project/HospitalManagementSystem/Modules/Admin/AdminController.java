@@ -2,7 +2,7 @@ package com.Project.HospitalManagementSystem.Modules.Admin;
 
 
 import com.Project.HospitalManagementSystem.Modules.DTO.GenerateTokenRequest;
-import com.Project.HospitalManagementSystem.Security.JwtUtil;
+import com.Project.HospitalManagementSystem.Security.JwtService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -15,14 +15,14 @@ public class AdminController {
     private AdminService adminService;
 
     @Autowired
-    JwtUtil jwtUtil;
+    JwtService jwtService;
 
     @PostMapping("/admin/token")
 
     public void tokenGeneration(@Valid @RequestBody GenerateTokenRequest request,@RequestHeader("authorization")String authHeader){
         String  jToken=authHeader.substring(7);
         System.out.println(jToken);
-        String adminmail= jwtUtil.extractEmail(jToken);
+        String adminmail= jwtService.extractEmail(jToken);
         System.out.println(adminmail);
          adminService.tokenGeneration(request,adminmail);
     }

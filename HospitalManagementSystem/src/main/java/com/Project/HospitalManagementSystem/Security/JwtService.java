@@ -11,28 +11,31 @@ import java.security.Key;
 import java.util.Date;
 
 @Component
-public class JwtUtil {
+public class JwtService {
 
     @Value("${security.jwt.secret}")
     private String SECRET;
+
+    @Value("${security.jwt.expiration}")
+    private long expiration;
 
     private Key getSignKey(){
         return Keys.hmacShaKeyFor(SECRET.getBytes());
     }
 
-    public String generateToken(String email, Byte roleId, String roleName, String userID) {
+    public String generateToken(String userID) {
         return Jwts.builder()
-                .setSubject(email)
-                .claim("roleId", roleId)
+                .setSubject(userID)
+                /*.claim("roleId", roleId)
                 .claim("roleName", roleName)
-                .claim("userID",userID)
+                .claim("userID",userID)*/
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(getSignKey(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String extractEmail(String token){
+    /*public String extractEmail(String token){
 
         return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
@@ -58,14 +61,14 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody()
                 .get("roleName", String.class);
-    }
+    }*/
     public String extractUserId(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSignKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("userID", String.class);
+                .getSubject();
     }
     public boolean validateToken(String token){
 

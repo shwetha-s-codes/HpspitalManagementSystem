@@ -5,8 +5,7 @@ import com.Project.HospitalManagementSystem.Modules.DTO.NurseProfileRequest;
 import com.Project.HospitalManagementSystem.Modules.DTO.PatientProfileRequest;
 import com.Project.HospitalManagementSystem.Modules.DTO.StaffProfileRequest;
 import com.Project.HospitalManagementSystem.Modules.Profile.Service.ProfileService;
-import com.Project.HospitalManagementSystem.Modules.Profile.Service.ProfileServiceImpl;
-import com.Project.HospitalManagementSystem.Security.JwtUtil;
+import com.Project.HospitalManagementSystem.Security.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,7 @@ public class ProfileController {
     private ProfileService profileService;
 
     @Autowired
-    private JwtUtil jwtUtil;
+    private JwtService jwtService;
 
 
 
@@ -76,6 +75,6 @@ public class ProfileController {
 
     private String extractEmail(HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
-        return jwtUtil.extractEmail(token);
+        return jwtService.extractEmail(token);
     }
 }

@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @Table(name = "DoctorLeave")
 @AllArgsConstructor
 @NoArgsConstructor
-public class DoctorLeaves{
+public class DoctorLeave {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
