@@ -26,9 +26,9 @@ public class DoctorSheduleController {
 
         String Jtoken=token.substring(7);
         String doctorId= jwtService.extractUserId(Jtoken);
-        Byte roleId= jwtService.extractRoleId(Jtoken);
 
-        return ResponseEntity.ok(doctorSheduleService.setDoctorShedule(doctorId,roleId,doctorShedule));
+
+        return ResponseEntity.ok(doctorSheduleService.setDoctorShedule(doctorId,doctorShedule));
 
     }
 
@@ -38,9 +38,9 @@ public class DoctorSheduleController {
 
         String Jtoken=token.substring(7);
         String doctorId= jwtService.extractUserId(Jtoken);
-        Byte roleId= jwtService.extractRoleId(Jtoken);
 
-        return ResponseEntity.ok(doctorSheduleService.addShift(doctorId,roleId,doctorShift));
+
+        return ResponseEntity.ok(doctorSheduleService.addShift(doctorId,doctorShift));
 
     }
 
@@ -52,11 +52,11 @@ public class DoctorSheduleController {
 
        String Jtoken=token.substring(7);
        String doctorId= jwtService.extractUserId(Jtoken);
-       Byte roleId= jwtService.extractRoleId(Jtoken);
+
        System.out.println(doctorShift.getStartTime());
        System.out.println(doctorShift.getEndTime());
 
-       return ResponseEntity.ok(doctorSheduleService.updateShift(doctorId,roleId,shiftId,doctorShift));
+       return ResponseEntity.ok(doctorSheduleService.updateShift(doctorId,shiftId,doctorShift));
 
    }
 
@@ -66,9 +66,9 @@ public class DoctorSheduleController {
                                        @RequestParam(required = false)String shiftId) {
        String Jtoken=token.substring(7);
        String doctorId= jwtService.extractUserId(Jtoken);
-       Byte roleId= jwtService.extractRoleId(Jtoken);
 
-       return ResponseEntity.ok(doctorSheduleService.deleteShift(doctorId,roleId,shiftId));
+
+       return ResponseEntity.ok(doctorSheduleService.deleteShift(doctorId,shiftId));
     }
 
     @GetMapping("/shedule")
@@ -76,9 +76,9 @@ public class DoctorSheduleController {
                                                                @RequestParam(required = false)String day) {
         String Jtoken=token.substring(7);
         String doctorId= jwtService.extractUserId(Jtoken);
-        Byte roleId= jwtService.extractRoleId(Jtoken);
 
-        return ResponseEntity.ok(doctorSheduleService.showShift(doctorId,roleId,day));
+
+        return ResponseEntity.ok(doctorSheduleService.showShift(doctorId,day));
     }
    }
 

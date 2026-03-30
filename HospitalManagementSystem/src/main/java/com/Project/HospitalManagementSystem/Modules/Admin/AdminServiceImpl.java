@@ -9,11 +9,13 @@ import com.Project.HospitalManagementSystem.Modules.Exceptions.InvalidCredential
 import com.Project.HospitalManagementSystem.Modules.Nurses.NurseRepo;
 import com.Project.HospitalManagementSystem.Modules.Patients.PatientRepo;
 import com.Project.HospitalManagementSystem.Modules.Staff.StaffRepo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class AdminServiceImpl implements AdminService{
 
 
@@ -41,11 +43,11 @@ public class AdminServiceImpl implements AdminService{
     @Autowired
     private AppointmentRepo appointmentRepo;
 
-    public void tokenGeneration(GenerateTokenRequest request, String adminmail){
+    public void tokenGeneration(GenerateTokenRequest request, String adminId){
 
-        System.out.print(adminmail);
+        log.info(adminId);
 
-        Admins admins=adminRepo.findByemailID(adminmail).orElseThrow(()-> new InvalidCredentialsException("This is not a admin mail you can't access this resource"));
+        Admins admins=adminRepo.findById(adminId).orElseThrow(()-> new InvalidCredentialsException("This is not a admin mail you can't access this resource"));
         System.out.println(admins);
         if(admins==null)
         {

@@ -34,8 +34,8 @@ public class ProfileServiceImpl implements ProfileService{
         // ─── CREATE ──────────────────────────────────────────────
 
         @Transactional
-        public String createDoctorProfile(String email, DoctorProfileRequest request) {
-            Users user = getUser(email);
+        public String createDoctorProfile(String userId, DoctorProfileRequest request) {
+            Users user = getUser(userId);
 
             if (doctorRepo.existsByUser(user)) {
                 throw new InvalidCredentialsException("Profile already exists, use update endpoint");
@@ -61,8 +61,8 @@ public class ProfileServiceImpl implements ProfileService{
         }
 
         @Transactional
-        public String createNurseProfile(String email, NurseProfileRequest request) {
-            Users user = getUser(email);
+        public String createNurseProfile(String userId, NurseProfileRequest request) {
+            Users user = getUser(userId);
 
             if (nurseRepo.existsByUser(user)) {
                 throw new InvalidCredentialsException("Profile already exists, use update endpoint");
@@ -83,8 +83,8 @@ public class ProfileServiceImpl implements ProfileService{
         }
 
         @Transactional
-        public String createPatientProfile(String email, PatientProfileRequest request) {
-            Users user = getUser(email);
+        public String createPatientProfile(String userId, PatientProfileRequest request) {
+            Users user = getUser(userId);
 
             if (patientRepo.existsByUser(user)) {
                 throw new InvalidCredentialsException("Profile already exists, use update endpoint");
@@ -114,8 +114,8 @@ public class ProfileServiceImpl implements ProfileService{
         }
 
         @Transactional
-        public String createStaffProfile(String email, StaffProfileRequest request) {
-            Users user = getUser(email);
+        public String createStaffProfile(String UserId, StaffProfileRequest request) {
+            Users user = getUser(UserId);
 
             if (staffRepo.existsByUser(user)) {
                 throw new InvalidCredentialsException("Profile already exists, use update endpoint");
@@ -138,8 +138,8 @@ public class ProfileServiceImpl implements ProfileService{
 
 
         @Transactional
-        public String updateDoctorProfile(String email, DoctorProfileRequest request) {
-            Users user = getUser(email);
+        public String updateDoctorProfile(String userId, DoctorProfileRequest request) {
+            Users user = getUser(userId);
 
             Doctor doctor = doctorRepo.findByUser(user)
                     .orElseThrow(() -> new InvalidCredentialsException("Profile not found, create profile first"));
@@ -159,8 +159,8 @@ public class ProfileServiceImpl implements ProfileService{
         }
 
         @Transactional
-        public String updateNurseProfile(String email, NurseProfileRequest request) {
-            Users user = getUser(email);
+        public String updateNurseProfile(String userId, NurseProfileRequest request) {
+            Users user = getUser(userId);
 
             Nurse nurse = nurseRepo.findByUser(user)
                     .orElseThrow(() -> new InvalidCredentialsException("Profile not found, create profile first"));
@@ -178,8 +178,8 @@ public class ProfileServiceImpl implements ProfileService{
         }
 
         @Transactional
-        public String updatePatientProfile(String email, PatientProfileRequest request) {
-            Users user = getUser(email);
+        public String updatePatientProfile(String userId, PatientProfileRequest request) {
+            Users user = getUser(userId);
 
             Patient patient = patientRepo.findByUser(user)
                     .orElseThrow(() -> new InvalidCredentialsException("Profile not found, create profile first"));
@@ -199,8 +199,8 @@ public class ProfileServiceImpl implements ProfileService{
         }
 
         @Transactional
-        public String updateStaffProfile(String email, StaffProfileRequest request) {
-            Users user = getUser(email);
+        public String updateStaffProfile(String userId, StaffProfileRequest request) {
+            Users user = getUser(userId);
 
             Staff staff = staffRepo.findByUser(user)
                     .orElseThrow(() -> new InvalidCredentialsException("Profile not found, create profile first"));
@@ -219,8 +219,8 @@ public class ProfileServiceImpl implements ProfileService{
 
 
 
-        private Users getUser(String email) {
-            return userRepo.findByemailId(email)
+        private Users getUser(String userId) {
+            return userRepo.findById(userId)
                     .orElseThrow(() -> new InvalidCredentialsException("User not found"));
         }
 

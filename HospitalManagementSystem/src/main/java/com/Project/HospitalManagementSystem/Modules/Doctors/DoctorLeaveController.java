@@ -21,10 +21,10 @@ public class DoctorLeaveController {
             @RequestBody DoctorLeaveRequest request) {
 
         String doctorId = jwtService.extractUserId(token);
-        Byte roleId = jwtService.extractRoleId(token);
+
 
         return ResponseEntity.ok(
-                doctorLeaveService.applyLeave(doctorId, roleId, request)
+                doctorLeaveService.applyLeave(doctorId,request)
         );
     }
 }

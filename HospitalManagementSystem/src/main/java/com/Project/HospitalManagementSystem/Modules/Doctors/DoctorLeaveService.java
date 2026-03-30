@@ -5,5 +5,5 @@ import com.Project.HospitalManagementSystem.Modules.DTO.DoctorLeaveResponse;
 
 public interface DoctorLeaveService {
     public DoctorLeaveResponse applyLeave(
-            String userId, Byte roleId, DoctorLeaveRequest request);
+            String userId,DoctorLeaveRequest request);
 }

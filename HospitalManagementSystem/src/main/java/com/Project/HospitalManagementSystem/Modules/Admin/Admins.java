@@ -55,5 +55,5 @@ public class Admins {
 
     @CreationTimestamp
 
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt=LocalDateTime.now();
 }

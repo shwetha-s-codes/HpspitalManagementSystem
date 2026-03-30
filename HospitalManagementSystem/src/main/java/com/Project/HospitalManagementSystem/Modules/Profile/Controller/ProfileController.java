@@ -25,25 +25,25 @@ public class ProfileController {
     @PostMapping("/create/doctor")
     public String createDoctorProfile(@RequestBody DoctorProfileRequest request,
                                       HttpServletRequest httpRequest) {
-        return profileService.createDoctorProfile(extractEmail(httpRequest), request);
+        return profileService.createDoctorProfile(extractUserId(httpRequest), request);
     }
 
     @PostMapping("/create/nurse")
     public String createNurseProfile(@RequestBody NurseProfileRequest request,
                                      HttpServletRequest httpRequest) {
-        return profileService.createNurseProfile(extractEmail(httpRequest), request);
+        return profileService.createNurseProfile(extractUserId(httpRequest), request);
     }
 
     @PostMapping("/create/patient")
     public String createPatientProfile(@RequestBody PatientProfileRequest request,
                                        HttpServletRequest httpRequest) {
-        return profileService.createPatientProfile(extractEmail(httpRequest), request);
+        return profileService.createPatientProfile(extractUserId(httpRequest), request);
     }
 
     @PostMapping("/create/staff")
     public String createStaffProfile(@RequestBody StaffProfileRequest request,
                                      HttpServletRequest httpRequest) {
-        return profileService.createStaffProfile(extractEmail(httpRequest), request);
+        return profileService.createStaffProfile(extractUserId(httpRequest), request);
     }
 
 
@@ -51,30 +51,30 @@ public class ProfileController {
     @PutMapping("/update/doctor")
     public String updateDoctorProfile(@RequestBody DoctorProfileRequest request,
                                       HttpServletRequest httpRequest) {
-        return profileService.updateDoctorProfile(extractEmail(httpRequest), request);
+        return profileService.updateDoctorProfile(extractUserId(httpRequest), request);
     }
 
     @PutMapping("/update/nurse")
     public String updateNurseProfile(@RequestBody NurseProfileRequest request,
                                      HttpServletRequest httpRequest) {
-        return profileService.updateNurseProfile(extractEmail(httpRequest), request);
+        return profileService.updateNurseProfile(extractUserId(httpRequest), request);
     }
 
     @PutMapping("/update/patient")
     public String updatePatientProfile(@RequestBody PatientProfileRequest request,
                                        HttpServletRequest httpRequest) {
-        return profileService.updatePatientProfile(extractEmail(httpRequest), request);
+        return profileService.updatePatientProfile(extractUserId(httpRequest), request);
     }
 
     @PutMapping("/update/staff")
     public String updateStaffProfile(@RequestBody StaffProfileRequest request,
                                      HttpServletRequest httpRequest) {
-        return profileService.updateStaffProfile(extractEmail(httpRequest), request);
+        return profileService.updateStaffProfile(extractUserId(httpRequest), request);
     }
 
 
-    private String extractEmail(HttpServletRequest request) {
+    private String extractUserId(HttpServletRequest request) {
         String token = request.getHeader("Authorization").substring(7);
-        return jwtService.extractEmail(token);
+        return jwtService.extractUserId(token);
     }
 }

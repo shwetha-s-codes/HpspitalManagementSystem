@@ -8,5 +8,5 @@ public interface AdminService {
 
     String deleteUser(String email);
 
-    public void tokenGeneration(@Valid GenerateTokenRequest request, String adminmail);
+    public void tokenGeneration(@Valid GenerateTokenRequest request, String adminId);
 }

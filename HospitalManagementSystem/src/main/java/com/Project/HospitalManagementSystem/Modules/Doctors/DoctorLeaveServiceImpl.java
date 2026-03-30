@@ -1,9 +1,11 @@
 package com.Project.HospitalManagementSystem.Modules.Doctors;
 
 import com.Project.HospitalManagementSystem.Modules.AllUsers.RolesRepo;
+import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
 import com.Project.HospitalManagementSystem.Modules.AllUsers.UsersRepo;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorLeaveRequest;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorLeaveResponse;
+import com.Project.HospitalManagementSystem.Modules.Exceptions.InvalidCredentialsException;
 import com.Project.HospitalManagementSystem.Modules.LookUpTables.Roles;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,10 +27,10 @@ public class DoctorLeaveServiceImpl implements DoctorLeaveService {
 
     @Transactional
     public DoctorLeaveResponse applyLeave(
-            String userId, Byte roleId, DoctorLeaveRequest request) {
+            String userId, DoctorLeaveRequest request) {
         log.info(userId);
 
-        Doctor doctor = validateAndGetDoctor(userId, roleId);
+        Doctor doctor = validateAndGetDoctor(userId);
 
         // validate date range
         if (request.getLeaveTo().isBefore(request.getLeaveFrom())) {
@@ -75,10 +77,9 @@ public class DoctorLeaveServiceImpl implements DoctorLeaveService {
 
     // ─── private helper ─────────────────────────────────────────────
 
-    private Doctor validateAndGetDoctor(String userId, Byte roleId) {
-        if (!usersRepo.existsById(userId)) {
-            throw new RuntimeException("User does not exist");
-        }
+    private Doctor validateAndGetDoctor(String userId) {
+        Users user= usersRepo.findById(userId).orElseThrow(()-> new InvalidCredentialsException("user not found"));
+        Byte roleId=user.getRoles().stream().map(Roles::getRoleID).findFirst().orElseThrow(()->new InvalidCredentialsException("No role found for this user"));
         Roles role = rolesRepo.findById(roleId)
                 .orElseThrow(() -> new RuntimeException("Role does not exist"));
         if (!"DOCTOR".equalsIgnoreCase(role.getName())) {

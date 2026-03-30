@@ -8,10 +8,9 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 public interface DoctorSheduleService {
-    public String setDoctorShedule(String userId, Byte roleId,DoctorShedule doctorShedule);
-
-    public String addShift(String userId, Byte roleId, DoctorShift shift);
-    public String updateShift(String userId, Byte roleId, String shiftId, DoctorShift shift);
-    public String deleteShift(String userId, Byte roleId, String shiftId);
-    public List<DoctorAvailabilityResponse>  showShift(String userId, Byte roleId, String day);
+    public String setDoctorShedule(String userId,DoctorShedule doctorShedule);
+    public String addShift(String userId,DoctorShift shift);
+    public String updateShift(String userId,String shiftId, DoctorShift shift);
+    public String deleteShift(String userId, String shiftId);
+    public List<DoctorAvailabilityResponse>  showShift(String userId, String day);
 }

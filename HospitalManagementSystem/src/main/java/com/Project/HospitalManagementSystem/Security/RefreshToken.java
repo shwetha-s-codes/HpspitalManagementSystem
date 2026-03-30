@@ -3,11 +3,18 @@ package com.Project.HospitalManagementSystem.Security;
 
 import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
 import jakarta.persistence.*;
-import org.hibernate.query.NativeQuery;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 @Table(name="RefreshToken")
 public class RefreshToken {
     @Id

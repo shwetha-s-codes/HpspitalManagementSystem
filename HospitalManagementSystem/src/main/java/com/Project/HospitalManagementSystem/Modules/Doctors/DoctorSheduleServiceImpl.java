@@ -37,9 +37,9 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
     UsersRepo usersRepo;
 
     @Transactional
-    public String setDoctorShedule(String userId, Byte roleId, DoctorShedule doctorShedule){
+    public String setDoctorShedule(String userId, DoctorShedule doctorShedule){
 
-        Doctor doctor=validateAndGetDoctor(userId,roleId);
+        Doctor doctor=validateAndGetDoctor(userId);
         List<DoctorAvailability>availabilities= doctorShedule.getDoctorShifts()
                 .stream()
                 .map(shift-> buildandValidateShift(doctor,shift,null))
@@ -53,18 +53,18 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
 
     }
     @Transactional
-    public String addShift(String userId, Byte roleId, DoctorShift shift) {
+    public String addShift(String userId,DoctorShift shift) {
 
-        Doctor doctor = validateAndGetDoctor(userId, roleId);
+        Doctor doctor = validateAndGetDoctor(userId);
         DoctorAvailability availability = buildandValidateShift(doctor, shift, null);
         doctorAvailabilityRepo.save(availability);
         return "Shift added successfully";
     }
 
     @Transactional
-    public String updateShift(String userId, Byte roleId, String shiftId, DoctorShift shift) {
+    public String updateShift(String userId, String shiftId, DoctorShift shift) {
 
-        Doctor doctor = validateAndGetDoctor(userId, roleId);
+        Doctor doctor = validateAndGetDoctor(userId);
 
         DoctorAvailability existing = doctorAvailabilityRepo.findById(shiftId)
                 .orElseThrow(() -> new RuntimeException("Shift not found"));
@@ -82,9 +82,9 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
     }
 
     @Transactional
-    public String deleteShift(String userId, Byte roleId, String shiftId) {
+    public String deleteShift(String userId,String shiftId) {
 
-        validateAndGetDoctor(userId, roleId);
+        validateAndGetDoctor(userId);
 
         if (!doctorAvailabilityRepo.existsById(shiftId)) {
             throw new ShiftOverLapException("Shift not found");
@@ -95,11 +95,11 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
     }
 
     @Transactional
-    public List<DoctorAvailabilityResponse>  showShift(String userId, Byte roleId, String day){
+    public List<DoctorAvailabilityResponse>  showShift(String userId, String day){
 
 
 
-        Doctor doctor = validateAndGetDoctor(userId, roleId);
+        Doctor doctor = validateAndGetDoctor(userId);
         if(day==null)
         return doctorAvailabilityRepo.findScheduleByDoctorId(doctor.getDoctorId());
         else
@@ -112,10 +112,12 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
 
     //Helper Methods
 
-    private Doctor validateAndGetDoctor(String userId,Byte roleId){
-        if(!usersRepo.existsById(userId)){
-            throw  new InvalidCredentialsException("User Not found");
-        }
+    private Doctor validateAndGetDoctor(String userId){
+
+       Users user= usersRepo.findById(userId).orElseThrow(()-> new InvalidCredentialsException("user not found"));
+       Byte roleId=user.getRoles().stream().map(Roles::getRoleID).findFirst().orElseThrow(()->new InvalidCredentialsException("No role found for this user"));
+
+
         Roles role =rolesRepo.findById(roleId).orElseThrow(()-> new InvalidCredentialsException("Role Not found"));
         if (!"DOCTOR".equalsIgnoreCase(role.getName())) {
             throw new InvalidCredentialsException("You can not access this resource");
