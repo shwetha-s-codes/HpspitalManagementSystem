@@ -36,7 +36,7 @@ public class UsersController {
 
 
 
-    @PostMapping("/login")
+    /*@PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest request){
 
         String token = usersService.LoginUser(request);
@@ -45,7 +45,7 @@ public class UsersController {
                 "message", "Login successful",
                 "token", token
         ));
-    }
+    }*/
 
 
 }

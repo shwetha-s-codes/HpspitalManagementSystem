@@ -36,6 +36,8 @@ public class DoctorAvailability {
 
     @Column(nullable = false)
     private LocalTime endTime;
+
+    private boolean deleted=false;
 }
 
 

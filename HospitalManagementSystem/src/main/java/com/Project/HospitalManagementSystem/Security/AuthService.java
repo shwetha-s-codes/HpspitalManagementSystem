@@ -1,48 +1,10 @@
 package com.Project.HospitalManagementSystem.Security;
 
-import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
-import com.Project.HospitalManagementSystem.Modules.AllUsers.UsersRepo;
 import com.Project.HospitalManagementSystem.Modules.DTO.LoginRequest;
 import com.Project.HospitalManagementSystem.Modules.DTO.LoginResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
-import java.sql.Ref;
-
-@Service
-@RequiredArgsConstructor
-public class AuthService {
-    private  final UsersRepo usersRepo;
-    private final JwtService jwtService;
-    private final RefreshTokenService refreshTokenService;
-    private final PasswordEncoder passwordEncoder;
-    private final AuthenticationManager authenticationManager;
-
-    public LoginResponse login(LoginRequest request){
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getEmailId(),
-                        request.getPassword()
-                )
-        );
-        Users user= usersRepo.findByemailId(request.getEmailId())
-                .orElseThrow(()->new RuntimeException("User not found"));
-        String accessToken=jwtService.generateToken(user.getUserID());
-
-        RefreshToken refreshToken=refreshTokenService.createRefreshToken(user.getUserID());
-        return new LoginResponse(accessToken,refreshToken.getToken());
-    }
-
-    public LoginResponse refresh(String refreshToken){
-        RefreshToken newRefreshToken=refreshTokenService.rotateRefreshToken(refreshToken);
-        String accessToken =jwtService.generateToken(newRefreshToken.getUser().getUserID());
-        return new LoginResponse(accessToken,newRefreshToken.getToken());
-    }
-
-    public void logout(String refreshToken){
-        refreshTokenService.revokeRefreshToken(refreshToken);
-    }
+public interface AuthService {
+    public LoginResponse login(LoginRequest request);
+    public LoginResponse refresh(String refreshToken);
+    public void logout(String refreshToken);
 }

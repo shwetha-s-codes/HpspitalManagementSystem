@@ -3,6 +3,7 @@ package com.Project.HospitalManagementSystem.Modules.Admin;
 import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
 import com.Project.HospitalManagementSystem.Modules.AllUsers.UsersRepo;
 import com.Project.HospitalManagementSystem.Modules.Appointment.AppointmentRepo;
+import com.Project.HospitalManagementSystem.Modules.DTO.DoctorSearchResponse;
 import com.Project.HospitalManagementSystem.Modules.DTO.GenerateTokenRequest;
 import com.Project.HospitalManagementSystem.Modules.Doctors.DoctorRepo;
 import com.Project.HospitalManagementSystem.Modules.Exceptions.InvalidCredentialsException;
@@ -13,6 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -98,5 +101,12 @@ public class AdminServiceImpl implements AdminService{
 
         userRepo.delete(user);
         return email + " deleted successfully";
+    }
+    @Transactional
+    public List<DoctorSearchResponse>  searchDoctor(String name){
+        if (name==null)
+            throw new InvalidCredentialsException("Kindly Write a  name");
+        else
+            return doctorRepo.searchName(name);
     }
 }

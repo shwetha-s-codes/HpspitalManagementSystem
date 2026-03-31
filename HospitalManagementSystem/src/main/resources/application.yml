@@ -26,4 +26,4 @@ security:
 
 refresh:
   token:
-    expiration: {$REFRESHTOKEN_EXPIRY:604800000}
+    expiration: ${REFRESHTOKEN_EXPIRY:604800000}

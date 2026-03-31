@@ -1,15 +1,19 @@
 package com.Project.HospitalManagementSystem.Modules.Admin;
 
 
+import com.Project.HospitalManagementSystem.Modules.DTO.DoctorSearchResponse;
 import com.Project.HospitalManagementSystem.Modules.DTO.GenerateTokenRequest;
 import com.Project.HospitalManagementSystem.Security.JwtService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/api/admin")
 @Slf4j
 public class AdminController {
 
@@ -19,7 +23,7 @@ public class AdminController {
     @Autowired
     JwtService jwtService;
 
-    @PostMapping("/admin/token")
+    @PostMapping("/token")
 
     public void tokenGeneration(@Valid @RequestBody GenerateTokenRequest request,@RequestHeader("authorization")String authHeader){
         String  jToken=authHeader.substring(7);
@@ -32,5 +36,14 @@ public class AdminController {
     public String deleteUser(@PathVariable String email) {
         return adminService.deleteUser(email);
     }
+
+    @GetMapping("/search/{name}")
+    public ResponseEntity<List<DoctorSearchResponse>> searchUser(@PathVariable String name){
+        log.info(name);
+        return ResponseEntity.ok(adminService.searchDoctor(name
+        ));
+
+    }
+
 
 }
