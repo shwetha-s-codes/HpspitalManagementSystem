@@ -7,7 +7,6 @@ import com.Project.HospitalManagementSystem.Modules.DTO.LoginRequest;
 import com.Project.HospitalManagementSystem.Modules.DTO.RegisterRequest;
 import com.Project.HospitalManagementSystem.Modules.Exceptions.InvalidCredentialsException;
 import com.Project.HospitalManagementSystem.Modules.LookUpTables.Roles;
-import com.Project.HospitalManagementSystem.Security.JwtService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +24,7 @@ public class UsersServiceImpl implements UsersService{
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtService jwtService;
+
 
     @Autowired
     InvitationTokenRepo invitationTokenRepo;
@@ -91,37 +89,7 @@ public class UsersServiceImpl implements UsersService{
     }
 
 
-    @Transactional
-    public  String LoginUser(LoginRequest request){
 
-        String emailId=request.getEmailId().toLowerCase().trim();
-        String password=request.getPassword();
-        Users user = usersRepo.findByemailId(emailId)
-                    .orElseThrow(() -> new InvalidCredentialsException("User not found"));
-
-            if(!passwordEncoder.matches(request.getPassword(), user.getPassword())){
-                throw new InvalidCredentialsException("Invalid password");
-            }
-
-            if(!user.isActive()){
-                throw new RuntimeException("Account is inactive");
-            }
-        // Get the first role from the set
-        Roles role = user.getRoles()
-                .stream()
-                .findFirst()
-                .orElseThrow(() -> new InvalidCredentialsException("No role assigned"));
-
-        Byte roleId = role.getRoleID();
-        String roleName = role.getName(); // e.g. "ADMIN", "DOCTOR"
-
-// Now generate token with roleId
-        return jwtService.generateToken(user.getUserID());
-
-
-
-
-        }
 
 
 }

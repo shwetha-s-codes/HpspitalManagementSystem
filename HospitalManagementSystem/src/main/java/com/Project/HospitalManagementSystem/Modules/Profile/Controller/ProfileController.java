@@ -6,8 +6,6 @@ import com.Project.HospitalManagementSystem.Modules.DTO.NurseProfileRequest;
 import com.Project.HospitalManagementSystem.Modules.DTO.PatientProfileRequest;
 import com.Project.HospitalManagementSystem.Modules.DTO.StaffProfileRequest;
 import com.Project.HospitalManagementSystem.Modules.Profile.Service.ProfileService;
-import com.Project.HospitalManagementSystem.Security.JwtService;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +17,9 @@ public class ProfileController {
     @Autowired
     private ProfileService profileService;
 
-    @Autowired
-    private JwtService jwtService;
+
+
+
 
 
 

@@ -2,6 +2,7 @@ package com.Project.HospitalManagementSystem.Security;
 
 import com.Project.HospitalManagementSystem.Modules.AllUsers.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,13 +19,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-
+@Slf4j
 public class SecurityConfig{
     private final JwtAuthFilter jwtAuthFilter;
     private final CustomUserDetailsService userDetailsService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+        log.info("Entered Function");
         http
                 .csrf(csrf->csrf.disable())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -32,13 +34,14 @@ public class SecurityConfig{
                         .requestMatchers("/api/auth/login",
                                                    "/api/auth/register",
                                                    "/api/auth/refresh/**").permitAll()
-                                .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
+                                .requestMatchers("/api/admin/**").hasAuthority("admin")
                                 .requestMatchers("/api/doctor/**").hasAuthority("DOCTOR")
                                 .anyRequest().authenticated()
 
                         )
                 .userDetailsService(userDetailsService)
                 .addFilterBefore(jwtAuthFilter,UsernamePasswordAuthenticationFilter.class);
+               log.info("Method Processed");
               return http.build();
 
     }

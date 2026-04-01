@@ -4,10 +4,8 @@ package com.Project.HospitalManagementSystem.Modules.Admin;
 import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorSearchResponse;
 import com.Project.HospitalManagementSystem.Modules.DTO.GenerateTokenRequest;
-import com.Project.HospitalManagementSystem.Security.JwtService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -23,8 +21,8 @@ public class AdminController {
     @Autowired
     private AdminService adminService;
 
-    @Autowired
-    JwtService jwtService;
+
+
 
     @PostMapping("/token")
 
@@ -36,6 +34,7 @@ public class AdminController {
 
         //Replacing JWT tokens with referenced tokens
         String adminId=users.getUserID();
+        log.info(adminId);
         adminService.tokenGeneration(request,adminId);
     }
     @DeleteMapping("/delete/{email}")

@@ -21,7 +21,7 @@ import java.io.IOException;
 @Slf4j
 public class JwtAuthFilter extends OncePerRequestFilter{
 
-    private final JwtService jwtService;
+
     private final UserDetailsService userDetailsService;
     private final ReferenceTokenService referenceTokenService;
 

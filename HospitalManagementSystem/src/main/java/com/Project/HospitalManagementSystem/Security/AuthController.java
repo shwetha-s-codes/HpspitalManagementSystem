@@ -20,10 +20,7 @@ public class AuthController {
         return ResponseEntity.ok(authService.login(request));
     }
 
-    @PostMapping("/refresh")
-    public ResponseEntity<LoginResponse> refresh(@RequestBody String refreshToken){
-        return ResponseEntity.ok(authService.refresh(refreshToken));
-    }
+
 
     @PostMapping("/logout")
     public ResponseEntity<String> logout(@RequestBody String refreshTOken){

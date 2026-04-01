@@ -4,7 +4,6 @@ import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorAvailabilityResponse;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorShedule;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorShift;
-import com.Project.HospitalManagementSystem.Security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,8 +18,7 @@ public class DoctorSheduleController {
     @Autowired
     DoctorSheduleService doctorSheduleService;
 
-    @Autowired
-    JwtService jwtService;
+
 
     @PostMapping("/shedule/create")
     ResponseEntity<String> createShedule(@AuthenticationPrincipal Users users,
