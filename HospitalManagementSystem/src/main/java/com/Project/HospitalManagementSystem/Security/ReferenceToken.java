@@ -25,7 +25,7 @@ public class ReferenceToken {
     @Column(nullable = false,unique = true)
     private String token;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="userId",nullable = false)
     private Users user;
 

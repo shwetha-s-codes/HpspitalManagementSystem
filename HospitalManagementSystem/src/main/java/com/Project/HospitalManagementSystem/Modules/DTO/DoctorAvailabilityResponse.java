@@ -1,20 +1,15 @@
 package com.Project.HospitalManagementSystem.Modules.DTO;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
 import java.time.LocalTime;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class DoctorAvailabilityResponse {
+public interface DoctorAvailabilityResponse {
 
-    private String availabilityId;
-    private String day;
-    private LocalTime startTime;
-    private LocalTime endTime;
+
+    String getAvailabilityId();
+    String getDay();
+    LocalTime getStartTime();
+    LocalTime getEndTime();
+
+
 
 }

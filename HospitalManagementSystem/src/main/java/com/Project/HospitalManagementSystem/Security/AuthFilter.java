@@ -19,7 +19,7 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class JwtAuthFilter extends OncePerRequestFilter{
+public class AuthFilter extends OncePerRequestFilter{
 
 
     private final UserDetailsService userDetailsService;
@@ -41,8 +41,12 @@ public class JwtAuthFilter extends OncePerRequestFilter{
         try {
 
             ReferenceToken referenceToken=referenceTokenService.validateReferenceToken(token);
-            String userId=referenceToken.getUser().getUserID();
-            UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+            log.info(token);
+            log.info(referenceToken.getUser().getEmailId());
+            String emailId=referenceToken.getUser().getEmailId();
+            log.info(emailId);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(emailId);
+            log.info(userDetails.getAuthorities().toString());
 
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
@@ -50,6 +54,7 @@ public class JwtAuthFilter extends OncePerRequestFilter{
             SecurityContextHolder.getContext().setAuthentication(authToken);
         }
         catch (RuntimeException ex){
+            log.error("Authentication Failed");
             SecurityContextHolder.clearContext();
         }
             filterChain.doFilter(request, response);

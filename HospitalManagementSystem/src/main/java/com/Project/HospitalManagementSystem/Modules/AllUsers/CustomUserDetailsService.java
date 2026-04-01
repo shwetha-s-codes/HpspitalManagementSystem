@@ -1,6 +1,7 @@
 package com.Project.HospitalManagementSystem.Modules.AllUsers;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -9,11 +10,13 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
     private final UsersRepo usersRepo;
 
     @Override
     public UserDetails loadUserByUsername(String emailId) throws UsernameNotFoundException{
+        log.info(emailId);
 
         return usersRepo.findByemailId(emailId).orElseThrow(()-> new UsernameNotFoundException("User not found with emial:"+emailId));
     }

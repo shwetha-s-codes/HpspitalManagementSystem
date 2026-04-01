@@ -1,4 +1,4 @@
-package com.Project.HospitalManagementSystem.Modules.Doctors;
+package com.Project.HospitalManagementSystem.Modules.Admin;
 
 import com.Project.HospitalManagementSystem.Modules.AllUsers.RolesRepo;
 import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
@@ -6,22 +6,26 @@ import com.Project.HospitalManagementSystem.Modules.AllUsers.UsersRepo;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorAvailabilityResponse;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorShedule;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorShift;
+import com.Project.HospitalManagementSystem.Modules.Doctors.Doctor;
+import com.Project.HospitalManagementSystem.Modules.Doctors.DoctorAvailability;
+import com.Project.HospitalManagementSystem.Modules.Doctors.DoctorAvailabilityRepo;
+import com.Project.HospitalManagementSystem.Modules.Doctors.DoctorRepo;
 import com.Project.HospitalManagementSystem.Modules.Exceptions.InvalidCredentialsException;
 import com.Project.HospitalManagementSystem.Modules.Exceptions.ShiftOverLapException;
 import com.Project.HospitalManagementSystem.Modules.LookUpTables.Roles;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-
+@Slf4j
 public class DoctorSheduleServiceImpl implements DoctorSheduleService{
 
     @Autowired
@@ -82,28 +86,36 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
     }
 
     @Transactional
-    public String deleteShift(String userId,String shiftId) {
-
-        validateAndGetDoctor(userId);
-
-        if (!doctorAvailabilityRepo.existsById(shiftId)) {
-            throw new ShiftOverLapException("Shift not found");
-        }
-
-        doctorAvailabilityRepo.deleteById(shiftId);
-        return "Shift deleted successfully";
+    public void deleteShift(String availabilityId, String doctorId) {
+        validateAndGetDoctor(doctorId);
+        doctorAvailabilityRepo.softDeleteShift(availabilityId, doctorId);
+        // placeholder for notification
+        notifyDoctor(doctorId, "Your shift has been removed by admin");
     }
 
     @Transactional
-    public List<DoctorAvailabilityResponse>  showShift(String userId, String day){
+    public void restoreShift(String availabilityId, String doctorId) {
+        validateAndGetDoctor(doctorId);
+        doctorAvailabilityRepo.restoreShift(availabilityId, doctorId);
+        // placeholder for notification
+        notifyDoctor(doctorId, "Your shift has been restored by admin");
+    }
 
+    private void notifyDoctor(String doctorId, String message) {
+        // TODO: implement notification layer
+        log.info("Notification to doctor {}: {}", doctorId, message);
+    }
 
-
+    @Transactional
+    public Page<DoctorAvailabilityResponse> showShift(Users users, String day, String doctorId,Pageable pageable) {
+        String userId= isAdmin() ? (doctorId != null ? doctorId : users.getUserID()) : users.getUserID();
         Doctor doctor = validateAndGetDoctor(userId);
-        if(day==null)
-        return doctorAvailabilityRepo.findScheduleByDoctorId(doctor.getDoctorId());
+
+        if (day == null)
+            return doctorAvailabilityRepo.findScheduleByDoctorId(doctor.getDoctorId(), pageable);
+
         else
-            return doctorAvailabilityRepo.findScheduleByDoctorIdAndDay(doctor.getDoctorId(),day);
+            return doctorAvailabilityRepo.findScheduleByDoctorIdAndDay(doctor.getDoctorId(), day, pageable);
 
     }
 
@@ -113,10 +125,10 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
     //Helper Methods
 
     private Doctor validateAndGetDoctor(String userId){
-
+       log.info(userId);
        Users user= usersRepo.findById(userId).orElseThrow(()-> new InvalidCredentialsException("user not found"));
        Byte roleId=user.getRoles().stream().map(Roles::getRoleID).findFirst().orElseThrow(()->new InvalidCredentialsException("No role found for this user"));
-
+       log.info(String.valueOf(roleId));
 
         Roles role =rolesRepo.findById(roleId).orElseThrow(()-> new InvalidCredentialsException("Role Not found"));
         if (!"DOCTOR".equalsIgnoreCase(role.getName())) {
@@ -157,6 +169,13 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
         availability.setStartTime(shift.getStartTime());
         availability.setEndTime(shift.getEndTime());
         return availability;
+    }
+    private boolean isAdmin() {
+        return SecurityContextHolder.getContext()
+                .getAuthentication()
+                .getAuthorities()
+                .stream()
+                .anyMatch(a -> a.getAuthority().equals("Admin"));
     }
 
 

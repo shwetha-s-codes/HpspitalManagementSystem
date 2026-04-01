@@ -1,18 +1,18 @@
-package com.Project.HospitalManagementSystem.Modules.Doctors;
+package com.Project.HospitalManagementSystem.Modules.Admin;
 
 import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
-import com.Project.HospitalManagementSystem.Modules.DTO.DoctorAvailabilityResponse;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorShedule;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorShift;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/doctor")
+@RequestMapping("/api/admin")
+@Slf4j
 public class DoctorSheduleController {
 
     @Autowired
@@ -21,11 +21,13 @@ public class DoctorSheduleController {
 
 
     @PostMapping("/shedule/create")
-    ResponseEntity<String> createShedule(@AuthenticationPrincipal Users users,
+    @PreAuthorize("hasAuthority('Admin')")
+    ResponseEntity<String> createShedule(@RequestParam("doctorId")String doctorId,
                                    @RequestBody DoctorShedule doctorShedule){
+        log.info(doctorId);
 
 
-        String doctorId= users.getUserID();
+
 
 
         return ResponseEntity.ok(doctorSheduleService.setDoctorShedule(doctorId,doctorShedule));
@@ -33,10 +35,11 @@ public class DoctorSheduleController {
     }
 
     @PostMapping("/shedule/add")
-    ResponseEntity<String> addnewShift(@AuthenticationPrincipal Users users,
+    @PreAuthorize("hasAuthority('Admin')")
+    ResponseEntity<String> addnewShift(@RequestParam("doctorId")String doctorId,
                                          @RequestBody DoctorShift doctorShift){
 
-        String doctorId= users.getUserID();
+
 
 
         return ResponseEntity.ok(doctorSheduleService.addShift(doctorId,doctorShift));
@@ -44,12 +47,13 @@ public class DoctorSheduleController {
     }
 
    @PutMapping("/shedule/update")
+   @PreAuthorize("hasAuthority('Admin')")
 
-    ResponseEntity<String>  updateShift(@AuthenticationPrincipal Users users,
+    ResponseEntity<String>  updateShift(@RequestParam("doctorId")String doctorId,
                                         @RequestBody DoctorShift doctorShift,
                                         @RequestParam(required = false)String shiftId){
 
-       String doctorId= users.getUserID();
+
 
        System.out.println(doctorShift.getStartTime());
        System.out.println(doctorShift.getEndTime());
@@ -59,22 +63,18 @@ public class DoctorSheduleController {
    }
 
    @DeleteMapping("/shedule/delete")
+   @PreAuthorize("hasAuthority('Admin')")
 
-   ResponseEntity<String>  deleteShift(@AuthenticationPrincipal Users users,
+   ResponseEntity<String>  deleteShift(@RequestParam("doctorId")String doctorId,
                                        @RequestParam(required = false)String shiftId) {
-       String doctorId= users.getUserID();
+
+
 
 
        return ResponseEntity.ok(doctorSheduleService.deleteShift(doctorId,shiftId));
     }
 
-    @GetMapping("/shedule")
-    ResponseEntity<List<DoctorAvailabilityResponse>>  getShift(@AuthenticationPrincipal Users users,
-                                                               @RequestParam(required = false)String day) {
-        String doctorId= users.getUserID();
 
-        return ResponseEntity.ok(doctorSheduleService.showShift(doctorId,day));
-    }
    }
 
 

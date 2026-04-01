@@ -21,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityConfig{
-    private final JwtAuthFilter jwtAuthFilter;
+    private final AuthFilter authFilter;
     private final CustomUserDetailsService userDetailsService;
 
     @Bean
@@ -34,13 +34,14 @@ public class SecurityConfig{
                         .requestMatchers("/api/auth/login",
                                                    "/api/auth/register",
                                                    "/api/auth/refresh/**").permitAll()
-                                .requestMatchers("/api/admin/**").hasAuthority("admin")
-                                .requestMatchers("/api/doctor/**").hasAuthority("DOCTOR")
+                                .requestMatchers("/api/admin/**").hasAuthority("Admin")
+                                .requestMatchers("/api/doctor/**").hasAuthority("Doctor")
+                                .requestMatchers("/api/shedule/**").hasAuthority("Admin")
                                 .anyRequest().authenticated()
 
                         )
                 .userDetailsService(userDetailsService)
-                .addFilterBefore(jwtAuthFilter,UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(authFilter,UsernamePasswordAuthenticationFilter.class);
                log.info("Method Processed");
               return http.build();
 
