@@ -15,34 +15,29 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements  AuthService{
     private  final UsersRepo usersRepo;
     private final JwtService jwtService;
-    private final RefreshTokenService refreshTokenService;
+    private final ReferenceTokenService referenceTokenService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
     public LoginResponse login(LoginRequest request){
 
-        Users user= usersRepo.findByemailId(request.getEmailId())
-                .orElseThrow(()->new RuntimeException("User not found"));
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        user.getUserID(),
+                        request.getEmailId(),
                         request.getPassword()
                 )
         );
 
-        String accessToken=jwtService.generateToken(user.getUserID());
+        Users user= usersRepo.findByemailId(request.getEmailId())
+                .orElseThrow(()->new RuntimeException("User not found"));
 
-        RefreshToken refreshToken=refreshTokenService.createRefreshToken(user.getUserID());
-        return new LoginResponse(accessToken,refreshToken.getToken());
+        ReferenceToken referenceToken = referenceTokenService.createReferenceToken(user.getUserID());
+        return new LoginResponse(referenceToken.getToken());
     }
 
-    public LoginResponse refresh(String refreshToken){
-        RefreshToken newRefreshToken=refreshTokenService.rotateRefreshToken(refreshToken);
-        String accessToken =jwtService.generateToken(newRefreshToken.getUser().getUserID());
-        return new LoginResponse(accessToken,newRefreshToken.getToken());
-    }
 
-    public void logout(String refreshToken){
-        refreshTokenService.revokeRefreshToken(refreshToken);
+
+    public void logout(String token){
+        referenceTokenService.revokeReferenceToken(token);
     }
 }

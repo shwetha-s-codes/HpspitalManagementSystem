@@ -15,8 +15,8 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name="RefreshToken")
-public class RefreshToken {
+@Table(name="ReferenceToken")
+public class ReferenceToken {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id",columnDefinition = "VARCHAR(36)")
@@ -26,7 +26,7 @@ public class RefreshToken {
     private String token;
 
     @ManyToOne(fetch=FetchType.LAZY)
-    @JoinColumn(name="userId")
+    @JoinColumn(name="userId",nullable = false)
     private Users user;
 
     @Column(nullable = false)

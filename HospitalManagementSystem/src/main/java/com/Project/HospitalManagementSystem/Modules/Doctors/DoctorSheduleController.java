@@ -1,11 +1,13 @@
 package com.Project.HospitalManagementSystem.Modules.Doctors;
 
+import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorAvailabilityResponse;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorShedule;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorShift;
 import com.Project.HospitalManagementSystem.Security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,11 +23,11 @@ public class DoctorSheduleController {
     JwtService jwtService;
 
     @PostMapping("/shedule/create")
-    ResponseEntity<String> createShedule(@RequestHeader("Authorization")String token,
+    ResponseEntity<String> createShedule(@AuthenticationPrincipal Users users,
                                    @RequestBody DoctorShedule doctorShedule){
 
-        String Jtoken=token.substring(7);
-        String doctorId= jwtService.extractUserId(Jtoken);
+
+        String doctorId= users.getUserID();
 
 
         return ResponseEntity.ok(doctorSheduleService.setDoctorShedule(doctorId,doctorShedule));
@@ -33,11 +35,10 @@ public class DoctorSheduleController {
     }
 
     @PostMapping("/shedule/add")
-    ResponseEntity<String> addnewShift(@RequestHeader("Authorization")String token,
+    ResponseEntity<String> addnewShift(@AuthenticationPrincipal Users users,
                                          @RequestBody DoctorShift doctorShift){
 
-        String Jtoken=token.substring(7);
-        String doctorId= jwtService.extractUserId(Jtoken);
+        String doctorId= users.getUserID();
 
 
         return ResponseEntity.ok(doctorSheduleService.addShift(doctorId,doctorShift));
@@ -46,12 +47,11 @@ public class DoctorSheduleController {
 
    @PutMapping("/shedule/update")
 
-    ResponseEntity<String>  updateShift(@RequestHeader("Authorization")String token,
+    ResponseEntity<String>  updateShift(@AuthenticationPrincipal Users users,
                                         @RequestBody DoctorShift doctorShift,
                                         @RequestParam(required = false)String shiftId){
 
-       String Jtoken=token.substring(7);
-       String doctorId= jwtService.extractUserId(Jtoken);
+       String doctorId= users.getUserID();
 
        System.out.println(doctorShift.getStartTime());
        System.out.println(doctorShift.getEndTime());
@@ -62,21 +62,18 @@ public class DoctorSheduleController {
 
    @DeleteMapping("/shedule/delete")
 
-   ResponseEntity<String>  deleteShift(@RequestHeader("Authorization")String token,
+   ResponseEntity<String>  deleteShift(@AuthenticationPrincipal Users users,
                                        @RequestParam(required = false)String shiftId) {
-       String Jtoken=token.substring(7);
-       String doctorId= jwtService.extractUserId(Jtoken);
+       String doctorId= users.getUserID();
 
 
        return ResponseEntity.ok(doctorSheduleService.deleteShift(doctorId,shiftId));
     }
 
     @GetMapping("/shedule")
-    ResponseEntity<List<DoctorAvailabilityResponse>>  getShift(@RequestHeader("Authorization")String token,
+    ResponseEntity<List<DoctorAvailabilityResponse>>  getShift(@AuthenticationPrincipal Users users,
                                                                @RequestParam(required = false)String day) {
-        String Jtoken=token.substring(7);
-        String doctorId= jwtService.extractUserId(Jtoken);
-
+        String doctorId= users.getUserID();
 
         return ResponseEntity.ok(doctorSheduleService.showShift(doctorId,day));
     }

@@ -23,6 +23,7 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final ReferenceTokenService referenceTokenService;
 
     @Override
     protected  void doFilterInternal(HttpServletRequest request,
@@ -37,22 +38,22 @@ public class JwtAuthFilter extends OncePerRequestFilter{
 
         String token=authHeader.substring(7);
 
-        if(!jwtService.validateToken(token)){
-            log.error(token);
-            filterChain.doFilter(request,response);
-            return;
+        try {
+
+            ReferenceToken referenceToken=referenceTokenService.validateReferenceToken(token);
+            String userId=referenceToken.getUser().getUserID();
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userId);
+
+            UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+            authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authToken);
         }
+        catch (RuntimeException ex){
+            SecurityContextHolder.clearContext();
+        }
+            filterChain.doFilter(request, response);
 
-        String userId=jwtService.extractUserId(token);
-
-        UserDetails userDetails=userDetailsService.loadUserByUsername(userId);
-
-        UsernamePasswordAuthenticationToken authToken=new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-
-        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-
-        filterChain.doFilter(request,response);
     }
 
 

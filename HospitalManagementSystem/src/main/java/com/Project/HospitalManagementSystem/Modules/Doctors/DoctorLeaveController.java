@@ -1,10 +1,12 @@
 package com.Project.HospitalManagementSystem.Modules.Doctors;
 
+import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorLeaveRequest;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorLeaveResponse;
 import com.Project.HospitalManagementSystem.Security.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,10 +19,10 @@ public class DoctorLeaveController {
 
     @PostMapping("/leave")
     public ResponseEntity<DoctorLeaveResponse> applyLeave(
-            @RequestHeader("Authorization") String token,
+            @AuthenticationPrincipal Users users,
             @RequestBody DoctorLeaveRequest request) {
 
-        String doctorId = jwtService.extractUserId(token);
+        String doctorId= users.getUserID();
 
 
         return ResponseEntity.ok(
