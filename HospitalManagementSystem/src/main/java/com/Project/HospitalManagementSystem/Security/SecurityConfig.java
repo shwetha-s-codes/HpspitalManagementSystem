@@ -29,9 +29,9 @@ public class SecurityConfig{
                 .csrf(csrf->csrf.disable())
                 .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth-> auth
-                        .requestMatchers("/api/auth/login/**",
+                        .requestMatchers("/api/auth/login",
                                                    "/api/auth/register/**",
-                                                   "/api/auth/refresh/**","/api/admin/search/**").permitAll()
+                                                   "/api/auth/refresh/**").permitAll()
                                 .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                                 .requestMatchers("/api/doctor/**").hasAuthority("DOCTOR")
                                 .anyRequest().authenticated()

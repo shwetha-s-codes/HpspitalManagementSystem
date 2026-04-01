@@ -20,14 +20,16 @@ public class AuthServiceImpl implements  AuthService{
     private final AuthenticationManager authenticationManager;
 
     public LoginResponse login(LoginRequest request){
+
+        Users user= usersRepo.findByemailId(request.getEmailId())
+                .orElseThrow(()->new RuntimeException("User not found"));
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        request.getEmailId(),
+                        user.getUserID(),
                         request.getPassword()
                 )
         );
-        Users user= usersRepo.findByemailId(request.getEmailId())
-                .orElseThrow(()->new RuntimeException("User not found"));
+
         String accessToken=jwtService.generateToken(user.getUserID());
 
         RefreshToken refreshToken=refreshTokenService.createRefreshToken(user.getUserID());

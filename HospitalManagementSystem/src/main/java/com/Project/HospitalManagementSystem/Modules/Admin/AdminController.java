@@ -27,7 +27,7 @@ public class AdminController {
 
     public void tokenGeneration(@Valid @RequestBody GenerateTokenRequest request,@RequestHeader("authorization")String authHeader){
         String  jToken=authHeader.substring(7);
-        System.out.println(jToken);
+        log.info(jToken);
         String adminId= jwtService.extractUserId(jToken);
         log.info(adminId);
          adminService.tokenGeneration(request,adminId);
@@ -37,8 +37,8 @@ public class AdminController {
         return adminService.deleteUser(email);
     }
 
-    @GetMapping("/search/{name}")
-    public ResponseEntity<List<DoctorSearchResponse>> searchUser(@PathVariable String name){
+    @GetMapping("/search")
+    public ResponseEntity<List<DoctorSearchResponse>> searchUser(@RequestParam("name") String name){
         log.info(name);
         return ResponseEntity.ok(adminService.searchDoctor(name
         ));
