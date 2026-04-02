@@ -14,12 +14,12 @@ public interface DoctorLeaveRepo extends JpaRepository<DoctorLeave, String> {
 
     @Query(value = """
         SELECT COUNT(*) > 0 
-        FROM doctor_leaves
+        FROM doctor_leave
         WHERE doctor_id = :doctorId
         AND leave_from <= :leaveTo
         AND leave_to >= :leaveFrom
         """, nativeQuery = true)
-    boolean hasOverlappingLeave(
+    int  hasOverlappingLeave(
             @Param("doctorId") String doctorId,
             @Param("leaveFrom") LocalDate leaveFrom,
             @Param("leaveTo") LocalDate leaveTo

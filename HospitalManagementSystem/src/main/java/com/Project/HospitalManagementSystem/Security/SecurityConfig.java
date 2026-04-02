@@ -36,7 +36,7 @@ public class SecurityConfig{
                                                    "/api/auth/refresh/**").permitAll()
                                 .requestMatchers("/api/admin/**").hasAuthority("Admin")
                                 .requestMatchers("/api/doctor/**").hasAuthority("Doctor")
-                                .requestMatchers("/api/shedule/**").hasAuthority("Admin")
+                                .requestMatchers("/api/shedule/**").hasAnyAuthority("Admin","Doctor")
                                 .anyRequest().authenticated()
 
                         )

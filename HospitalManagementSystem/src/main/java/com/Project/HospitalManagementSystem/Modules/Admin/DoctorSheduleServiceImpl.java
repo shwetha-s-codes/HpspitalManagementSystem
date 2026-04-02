@@ -6,6 +6,7 @@ import com.Project.HospitalManagementSystem.Modules.AllUsers.UsersRepo;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorAvailabilityResponse;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorShedule;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorShift;
+import com.Project.HospitalManagementSystem.Modules.DTO.NotificationPayload;
 import com.Project.HospitalManagementSystem.Modules.Doctors.Doctor;
 import com.Project.HospitalManagementSystem.Modules.Doctors.DoctorAvailability;
 import com.Project.HospitalManagementSystem.Modules.Doctors.DoctorAvailabilityRepo;
@@ -13,7 +14,9 @@ import com.Project.HospitalManagementSystem.Modules.Doctors.DoctorRepo;
 import com.Project.HospitalManagementSystem.Modules.Exceptions.InvalidCredentialsException;
 import com.Project.HospitalManagementSystem.Modules.Exceptions.ShiftOverLapException;
 import com.Project.HospitalManagementSystem.Modules.LookUpTables.Roles;
+import com.Project.HospitalManagementSystem.Modules.Notification.NotificationService;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -21,11 +24,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@AllArgsConstructor
 public class DoctorSheduleServiceImpl implements DoctorSheduleService{
 
     @Autowired
@@ -39,6 +44,8 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
 
     @Autowired
     UsersRepo usersRepo;
+
+    private final NotificationService notificationService;
 
     @Transactional
     public String setDoctorShedule(String userId, DoctorShedule doctorShedule){
@@ -82,33 +89,71 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
         existing.setEndTime(shift.getEndTime());
 
         doctorAvailabilityRepo.save(existing);
+
+        notifyDoctor(existing.getAvailabilityId(), new NotificationPayload(
+                "Your shift has been updated by admin",
+                "SHIFT_UPDATED",
+                doctor.getDoctorId(),
+                existing.getAvailabilityId(),
+                shift.getDay().toString(),
+                shift.getStartTime().toString(),
+                shift.getEndTime().toString(),
+                LocalDateTime.now()
+        ));
         return "Shift updated successfully";
     }
 
     @Transactional
     public void deleteShift(String availabilityId, String doctorId) {
         validateAndGetDoctor(doctorId);
+        DoctorAvailability shift = doctorAvailabilityRepo.findById(availabilityId)
+                .orElseThrow(() -> new InvalidCredentialsException("Shift not found with id: " + availabilityId));
+        if (shift.isDeleted()) {
+            throw new InvalidCredentialsException("Shift is already deleted");
+        }
         doctorAvailabilityRepo.softDeleteShift(availabilityId, doctorId);
         // placeholder for notification
-        notifyDoctor(doctorId, "Your shift has been removed by admin");
+        notifyDoctor(doctorId, new NotificationPayload(
+                "Your shift has been deleted by admin",
+                "SHIFT_DELETED",
+                doctorId,
+                shift.getAvailabilityId(),
+                shift.getDay().toString(),
+                shift.getStartTime().toString(),
+                shift.getEndTime().toString(),
+                LocalDateTime.now()
+        ));
     }
 
     @Transactional
     public void restoreShift(String availabilityId, String doctorId) {
         validateAndGetDoctor(doctorId);
+        DoctorAvailability shift = doctorAvailabilityRepo.findById(availabilityId)
+                .orElseThrow(() -> new InvalidCredentialsException("Shift not found with id: " + availabilityId));
         doctorAvailabilityRepo.restoreShift(availabilityId, doctorId);
         // placeholder for notification
-        notifyDoctor(doctorId, "Your shift has been restored by admin");
+        notifyDoctor(doctorId, new NotificationPayload(
+                "Your shift has been restored by admin",
+                "SHIFT_RESTORED",
+                doctorId,
+                shift.getAvailabilityId(),
+                shift.getDay().toString(),
+                shift.getStartTime().toString(),
+                shift.getEndTime().toString(),
+                LocalDateTime.now()
+        ));
     }
 
-    private void notifyDoctor(String doctorId, String message) {
-        // TODO: implement notification layer
-        log.info("Notification to doctor {}: {}", doctorId, message);
+    private void notifyDoctor(String doctorId, NotificationPayload payload) {
+
+        notificationService.notifyDoctor(doctorId,payload);
     }
 
     @Transactional
     public Page<DoctorAvailabilityResponse> showShift(Users users, String day, String doctorId,Pageable pageable) {
         String userId= isAdmin() ? (doctorId != null ? doctorId : users.getUserID()) : users.getUserID();
+        log.info(userId);
+
         Doctor doctor = validateAndGetDoctor(userId);
 
         if (day == null)
@@ -125,6 +170,7 @@ public class DoctorSheduleServiceImpl implements DoctorSheduleService{
     //Helper Methods
 
     private Doctor validateAndGetDoctor(String userId){
+        log.info("Entered Function");
        log.info(userId);
        Users user= usersRepo.findById(userId).orElseThrow(()-> new InvalidCredentialsException("user not found"));
        Byte roleId=user.getRoles().stream().map(Roles::getRoleID).findFirst().orElseThrow(()->new InvalidCredentialsException("No role found for this user"));

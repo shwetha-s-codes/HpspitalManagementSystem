@@ -11,6 +11,7 @@ public interface DoctorSheduleService {
     public String setDoctorShedule(String userId,DoctorShedule doctorShedule);
     public String addShift(String userId,DoctorShift shift);
     public String updateShift(String userId,String shiftId, DoctorShift shift);
-    public String deleteShift(String userId, String shiftId);
+    public  void deleteShift(String availabilityId, String doctorId);
+    public  void restoreShift(String availabilityId, String doctorId);
     public Page<DoctorAvailabilityResponse> showShift(Users users, String day, String doctorId,Pageable pageable);
 }

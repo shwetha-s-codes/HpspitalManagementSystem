@@ -62,20 +62,27 @@ public class DoctorSheduleController {
 
    }
 
-   @DeleteMapping("/shedule/delete")
-   @PreAuthorize("hasAuthority('Admin')")
+    @DeleteMapping("/shifts/{availabilityId}/doctor/{doctorId}")
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<String> deleteShift(
+            @PathVariable String availabilityId,
+            @PathVariable String doctorId) {
+        doctorSheduleService.deleteShift(availabilityId, doctorId);
+        return ResponseEntity.ok("Shift Deleted Successfully");
+    }
 
-   ResponseEntity<String>  deleteShift(@RequestParam("doctorId")String doctorId,
-                                       @RequestParam(required = false)String shiftId) {
-
-
-
-
-       return ResponseEntity.ok(doctorSheduleService.deleteShift(doctorId,shiftId));
+    @PutMapping("/shifts/{availabilityId}/doctor/{doctorId}/restore")
+    @PreAuthorize("hasAuthority('Admin')")
+    public ResponseEntity<String> restoreShift(
+            @PathVariable String availabilityId,
+            @PathVariable String doctorId) {
+        doctorSheduleService.restoreShift(availabilityId, doctorId);
+        return ResponseEntity.ok("Shift Restored Successfully");
+    }
     }
 
 
-   }
+
 
 
 

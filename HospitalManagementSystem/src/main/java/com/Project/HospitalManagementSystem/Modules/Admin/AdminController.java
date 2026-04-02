@@ -4,22 +4,28 @@ package com.Project.HospitalManagementSystem.Modules.Admin;
 import com.Project.HospitalManagementSystem.Modules.AllUsers.Users;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorSearchResponse;
 import com.Project.HospitalManagementSystem.Modules.DTO.GenerateTokenRequest;
+import com.Project.HospitalManagementSystem.Modules.Notification.NotificationService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin")
 @Slf4j
+@RequiredArgsConstructor
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
+    private final NotificationService notificationService;
 
 
 
@@ -48,6 +54,11 @@ public class AdminController {
         return ResponseEntity.ok(adminService.searchDoctor(name
         ));
 
+    }
+    @GetMapping("/notifications/subscribe")
+    @PreAuthorize("hasAuthority('Admin')")
+    public SseEmitter subscribeAdmin(@AuthenticationPrincipal Users users) {
+        return notificationService.subscribeAdmin(users.getUserID());
     }
 
 

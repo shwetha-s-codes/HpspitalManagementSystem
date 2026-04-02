@@ -6,6 +6,7 @@ import com.Project.HospitalManagementSystem.Modules.AllUsers.UsersRepo;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorLeaveRequest;
 import com.Project.HospitalManagementSystem.Modules.DTO.DoctorLeaveResponse;
 import com.Project.HospitalManagementSystem.Modules.Exceptions.InvalidCredentialsException;
+import com.Project.HospitalManagementSystem.Modules.Exceptions.ShiftOverLapException;
 import com.Project.HospitalManagementSystem.Modules.LookUpTables.Roles;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,11 +49,14 @@ public class DoctorLeaveServiceImpl implements DoctorLeaveService {
         if (doctorLeaveRepo.hasOverlappingLeave(
                 doctor.getDoctorId(),
                 request.getLeaveFrom(),
-                request.getLeaveTo())) {
-            throw new RuntimeException(
-                    "Leave overlaps with an existing leave application"
+                request.getLeaveTo()
+            )>0)
+        {
+            throw new ShiftOverLapException(
+                    "The leave Overlaps with your existing leave please check "
             );
         }
+
 
         // build and save
         DoctorLeave leave = new DoctorLeave();
