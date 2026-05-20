@@ -1,4 +1,4 @@
-# Hospital Management System
+# Hospital Management System with ML powered neonatal RDS Prediction 
 
 A comprehensive Java-based Hospital Management System built with Spring Boot, designed to streamline hospital operations, patient management, and medical staff coordination.
 
